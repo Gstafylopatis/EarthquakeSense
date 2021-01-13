@@ -7,13 +7,11 @@ $(document).ready(function(){
         let position = new google.maps.LatLng(lat,lon);
         map.setCenter(position);
 
-        console.log("OK 1");
         let marker = new google.maps.Marker({
             map: map,
             position: position
         });
 
-        console.log("OK 2");
         let circle = new google.maps.Circle({
             radius: parseInt(radius), // Circle radius in meters
             map: map,
@@ -24,7 +22,6 @@ $(document).ready(function(){
             fillColor: '#FF0000',
             fillOpacity: 0.35,
         });
-        console.log("Ok 3")
     }
 
 
@@ -33,7 +30,7 @@ $(document).ready(function(){
         $.ajax({
             url: '/read_station',
             type: 'POST',
-            data: JSON.stringify({'station_num' : 0}),
+            data: JSON.stringify({'event_num' : 0}),
             contentType: 'application/json',
             success: function(response){
                 console.log(response);
@@ -51,12 +48,12 @@ $(document).ready(function(){
         $.ajax({
             url: '/read_station',
             type: 'POST',
-            data: JSON.stringify({'station_num' : 1}),
+            data: JSON.stringify({'event_num' : 1}),
             contentType: 'application/json',
             success: function(response){
                 console.log(response);
                 if(response.status === 'success'){
-                    add_marker(response.lat, response.lon);
+                    add_marker(response.lat, response.lon, response.radius);
                 }
             },
             error: function(error){
@@ -69,12 +66,12 @@ $(document).ready(function(){
         $.ajax({
             url: '/read_station',
             type: 'POST',
-            data: JSON.stringify({'station_num' : 2}),
+            data: JSON.stringify({'event_num' : 2}),
             contentType: 'application/json',
             success: function(response){
                 console.log(response);
                 if(response.status === 'success'){
-                    add_marker(response.lat, response.lon);
+                    add_marker(response.lat, response.lon, response.radius);
                 }
             },
             error: function(error){

@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request, jsonify
 import json
+from earthquake import SeismicEvent, Earthquake
 
 
 app = Flask(__name__)
 
-def get_station(station_number):
+def get_event(station_number):
     f = open("tests/ionian_test.json")
     x = json.load(f)
     return x['Event'][station_number]
@@ -16,10 +17,11 @@ def index():
 
 @app.route('/read_station', methods=['POST'])
 def read_station():
-    station_num = request.json.get('station_num')
-    station = get_station(station_num)
-    print(station)
-    return jsonify(status='success', lat=station['coord'][0], lon=station['coord'][1], radius=150*1000)
+    event_num = request.json.get('event_num')
+    event = get_event(event_num)
+    seismic_event = SeismicEvent(event['name'], event['coord'], event['ptime'], event['stime'], event['max_amp'])
+    seismic_event.report()
+    return jsonify(status='success', lat=seismic_event.coord[0], lon=seismic_event.coord[1], radius=seismic_event.distance_to_ep*1000)
 
 
 if __name__ == "__main__":

@@ -7,11 +7,13 @@ $(document).ready(function(){
         let position = new google.maps.LatLng(lat,lon);
         map.setCenter(position);
 
+        console.log("OK 1");
         let marker = new google.maps.Marker({
             map: map,
             position: position
         });
 
+        console.log("OK 2");
         let circle = new google.maps.Circle({
             radius: parseInt(radius), // Circle radius in meters
             map: map,
@@ -22,6 +24,7 @@ $(document).ready(function(){
             fillColor: '#FF0000',
             fillOpacity: 0.35,
         });
+        console.log("Ok 3")
     }
 
 
@@ -44,7 +47,7 @@ $(document).ready(function(){
         })
     });
 
-    $('#load1').on("click", function(){
+    $('#load2').on("click", function(){
         $.ajax({
             url: '/read_station',
             type: 'POST',
@@ -62,7 +65,7 @@ $(document).ready(function(){
         })
     });
 
-    $('#load1').on("click", function(){
+    $('#load3').on("click", function(){
         $.ajax({
             url: '/read_station',
             type: 'POST',

@@ -19,7 +19,7 @@ def read_station():
     station_num = request.json.get('station_num')
     station = get_station(station_num)
     print(station)
-    return jsonify(status='success', lat=10, lon=10)
+    return jsonify(status='success', lat=station['coord'][0], lon=station['coord'][1], radius=150*1000)
 
 
 if __name__ == "__main__":

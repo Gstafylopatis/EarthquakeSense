@@ -11,9 +11,4 @@ function initMap(){
 
     map = new google.maps.Map(document.getElementById('map'), map_options);
 
-    new google.maps.Marker({
-        position: center,
-        map,
-        title: "hello"
-    });
 }

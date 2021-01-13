@@ -31,4 +31,40 @@ $(document).ready(function(){
             },
         })
     });
+
+    $('#load1').on("click", function(){
+        $.ajax({
+            url: '/read_station',
+            type: 'POST',
+            data: JSON.stringify({'station_num' : 1}),
+            contentType: 'application/json',
+            success: function(response){
+                console.log(response);
+                if(response.status === 'success'){
+                    add_marker(response.lat, response.lon);
+                }
+            },
+            error: function(error){
+                console.log(error.message);
+            },
+        })
+    });
+
+    $('#load1').on("click", function(){
+        $.ajax({
+            url: '/read_station',
+            type: 'POST',
+            data: JSON.stringify({'station_num' : 2}),
+            contentType: 'application/json',
+            success: function(response){
+                console.log(response);
+                if(response.status === 'success'){
+                    add_marker(response.lat, response.lon);
+                }
+            },
+            error: function(error){
+                console.log(error.message);
+            },
+        })
+    });
 });

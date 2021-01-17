@@ -2,6 +2,31 @@
 $(document).ready(function(){
     var events_counter = 0;
 
+    var myParent= document.getElementById('form');
+    var array = [];
+    $.ajax({
+        url: '/get_tests',
+        type: 'GET',
+        contentType: 'application/json',
+        success: function(response){
+            console.log(response);
+            if(response.status === 'success'){
+                array = response.files;
+                var mySelect = $('#tests');
+                $.each(array, function(val){
+                    mySelect.append(new Option(array[val], array[val]));
+                });
+            }
+        },
+        error: function(error){
+            console.log(error.message);
+        },
+    })
+
+   
+
+
+
     /* -------------- Add Marker function ---------------- */
     function add_marker(lat, lon, radius){
         let position = new google.maps.LatLng(lat,lon);
@@ -26,9 +51,9 @@ $(document).ready(function(){
         events_counter++;
     }
 
-    function add_inter_marker(lat1, lon1, lat2, lon2){
-        let position1 = new google.maps.LatLng(lat1,lon1);
-        let position2 = new google.maps.LatLng(lat2,lon2);
+    function add_inter_marker(p1, p2){
+        let position1 = new google.maps.LatLng(p1[0], p1[1]);
+        let position2 = new google.maps.LatLng(p2[0], p2[1]);
        
 
         let marker1 = new google.maps.Marker({
@@ -68,13 +93,35 @@ $(document).ready(function(){
         })
     }
 
+    function intersection(){
+        $.ajax({
+            url: '/intersect',
+            type: 'GET',
+            contentType: 'application/json',
+            success: function(response){
+                console.log(response);
+                if(response.status === 'success'){
+                    add_inter_marker(response.p1, response.p2);
+                }
+            },
+            error: function(error){
+                console.log(error.message);
+            },
+        })
+    }
+
+    var selectedTest;
+    $('#load_test').on("click", function(){
+        selectedTest = $('#tests').find(":selected").text();
+        document.getElementById('load').style.display = "block";
+    });
 
     /* -------------- Add first station ------------------ */
     $('#load1').on("click", function(){
         $.ajax({
             url: '/read_station',
             type: 'POST',
-            data: JSON.stringify({'event_num' : 0}),
+            data: JSON.stringify({'testFile' : selectedTest, 'event_num' : 0}),
             contentType: 'application/json',
             success: function(response){
                 console.log(response);
@@ -92,14 +139,14 @@ $(document).ready(function(){
         $.ajax({
             url: '/read_station',
             type: 'POST',
-            data: JSON.stringify({'event_num' : 1}),
+            data: JSON.stringify({'testFile' : selectedTest, 'event_num' : 1}),
             contentType: 'application/json',
             success: function(response){
                 console.log(response);
                 if(response.status === 'success'){
                     add_marker(response.lat, response.lon, response.radius);
                     if(events_counter == 2){
-                        add_inter_marker(lat1=37.3981, lon1=21.2486, lat2=28.2486, lon2=34.3981);
+                        intersection();
                     }
                     
                 }
@@ -114,7 +161,7 @@ $(document).ready(function(){
         $.ajax({
             url: '/read_station',
             type: 'POST',
-            data: JSON.stringify({'event_num' : 2}),
+            data: JSON.stringify({'testFile' : selectedTest, 'event_num' : 2}),
             contentType: 'application/json',
             success: function(response){
                 console.log(response);

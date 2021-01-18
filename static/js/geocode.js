@@ -2,31 +2,32 @@
 $(document).ready(function(){
     var events_counter = 0;
 
-    var myParent= document.getElementById('form');
-    var array = [];
-    $.ajax({
-        url: '/get_tests',
-        type: 'GET',
-        contentType: 'application/json',
-        success: function(response){
-            console.log(response);
-            if(response.status === 'success'){
-                array = response.files;
-                var mySelect = $('#tests');
-                $.each(array, function(val){
-                    mySelect.append(new Option(array[val], array[val]));
-                });
-            }
-        },
-        error: function(error){
-            console.log(error.message);
-        },
-    })
 
-   
+    /* Prepare the menus */
+    var files = [];
+    
+    populate_list();
 
-
-
+    function populate_list(){
+        $.ajax({
+            url: '/get_tests',
+            type: 'GET',
+            contentType: 'application/json',
+            success: function(response){
+                console.log(response);
+                if(response.status === 'success'){
+                    files = response.files;
+                    var mySelect = $('#tests');
+                    $.each(files, function(i){
+                        mySelect.append(new Option(files[i], files[i]));
+                    });
+                }
+            },
+            error: function(error){
+                console.log(error.message);
+            },
+        })
+    }
     /* -------------- Add Marker function ---------------- */
     function add_marker(lat, lon, radius){
         let position = new google.maps.LatLng(lat,lon);
@@ -110,6 +111,7 @@ $(document).ready(function(){
         })
     }
 
+  
     var selectedTest;
     $('#load_test').on("click", function(){
         selectedTest = $('#tests').find(":selected").text();

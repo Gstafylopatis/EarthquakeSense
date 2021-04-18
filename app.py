@@ -6,6 +6,10 @@ from earthquake import SeismicEvent, Earthquake
 from intersect import intersection
 from os import walk
 
+from math import log10, radians, cos, sin, degrees, asin, atan2
+earthRadius = 6371  # km
+
+
 seismic_events_list = []
 
 app = Flask(__name__)
@@ -84,5 +88,20 @@ def intersect():
         return jsonify(status=404)
 
 
+
+def toECEF(coord):
+
+    lat = coord[0]
+    lon = coord[1]
+
+    x = earthRadius * (cos(radians(lat)) * cos(radians(lon)))
+    y = earthRadius * (cos(radians(lat)) * sin(radians(lon)))
+    z = earthRadius * sin(radians(lat))
+
+    return x,y,z
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+
+#Ionian '37.3981', '21.2486'

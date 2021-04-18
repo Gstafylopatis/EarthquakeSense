@@ -27,8 +27,6 @@ class SeismicEvent:
             For s-wave d = Vs * Ts
             Solve the system with 2 unknown vars.
         """
-        #Vs = 3.67
-        #Vp = 6.34
 
         wave_velocity = (Vs * Vp) / (Vp - Vs)
         distance = self.delta_time * wave_velocity
@@ -108,6 +106,10 @@ class Earthquake:
         x2 = earthRadius * (cos(radians(self.lat2)) * cos(radians(self.lon2)))
         y2 = earthRadius * (cos(radians(self.lat2)) * sin(radians(self.lon2)))
         z2 = earthRadius * sin(radians(self.lat2))
+
+        print(x0, y0, z0)
+        print(x1,y1,z1)
+        print(x2,y2,z2)
 
         """
         Create an array for each set of coord so we can easily transform points so p0 is on origin,
